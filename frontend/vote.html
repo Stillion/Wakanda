@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+		
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="*"></script>
+
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Vote For Wakanda UN Officials</h1>
+
+        <label for="ddlCandidates">Candidate:</label>
+        <select name="ddlCandidates" id="ddlCandidates">
+            <option value="default">Select Candidate</option>
+        </select>
+        
+        <hr>
+
+        <label for="lblWkndAmount">WKND Amount:</label>
+        <input type="text" id="inWkndAmount" placeholder="Vote = 1 WKND">
+
+        <button id="btnVote">VOTE</button>
+
+        <div id="divLeaderboard" class="hide">
+
+            <label for="ulLeaders">Leaderboard:</label>
+            <ul id="ulLeaders">
+                <li>test1</li>
+                <li>test2</li>
+                <li>test3</li>
+            </ul>
+        </div>
+
+        <button id="btnLeaderboard">Show Leads</button>
+    </div>
+    
+</body>
+<script>
+    var numberOfVotes = 0;
+
+    $(document).ready(function() {
+        /*API Candidates: https://wakanda.zmilos.com/list
+          
+          Response: candidates: [
+                        {
+                            name: string;
+                            age: number;
+                            cult: string;
+                        }
+                    ]
+        */
+        $.get( "https://wakanda.zmilos.com/list", function( data ) {
+            var candidates = data.candidates;
+            $('#ddlCandidates').empty();
+            $('#ddlCandidates').append('<option value="">Select A Candidate</option>');
+            for (i in candidates ) {
+                $('#ddlCandidates').append('<option value="' + candidates[i].name + '">' + candidates[i].name + ', '+ candidates[i].cult + '</option>');
+            }
+        });
+
+    });
+
+    function onSuccess(data){
+
+    }
+
+    $("#btnVote").click(function(){
+        if(numberOfVotes === 0){
+            alert("Voted successfully!");
+            numberOfVotes++;
+        }else{
+            alert("Voting failed! You've already voted!!");
+        }
+    });
+
+    $("#btnLeaderboard").click(function(){
+        $("#divLeaderboard").toggleClass("hide");
+    });
+
+</script>
+</html>
