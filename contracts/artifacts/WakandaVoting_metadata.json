@@ -1,0 +1,160 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					}
+				],
+				"name": "NewChallenger",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "candidates",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "votes",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "ethAddress",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_name",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "_ethAddress",
+						"type": "address"
+					}
+				],
+				"name": "createCandidate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_candidateAddress",
+						"type": "address"
+					}
+				],
+				"name": "voteForCandidate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "winningCandidates",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "votes",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "ethAddress",
+								"type": "address"
+							}
+						],
+						"internalType": "struct WakandaVoting.Candidate[3]",
+						"name": "",
+						"type": "tuple[3]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"author": "Milos Dograjic",
+			"kind": "dev",
+			"methods": {
+				"winningCandidates()": {
+					"details": "implement the function "
+				}
+			},
+			"title": "A contract for voting for Wakandan UN Officials",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"winningCandidates()": {
+					"notice": "This function returns the list of top 3 candidates"
+				}
+			},
+			"notice": "For now this contract is simulating the Wakandan voting mechanism",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/WakandaVoting.sol": "WakandaVoting"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/WakandaVoting.sol": {
+			"keccak256": "0xb24b8e62a67753ba0de47c5d6143cfb776847d5eafcd085612ada4d966ac3df4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2b01cb407ee715f276e565f17912a5e8fb04058ec3b37e0b83bb084498e9246a",
+				"dweb:/ipfs/QmSLPbBbenbENFpqEwi35VbwVz2mPM3UtmKZBsr62g7jvq"
+			]
+		}
+	},
+	"version": 1
+}
