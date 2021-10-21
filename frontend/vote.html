@@ -45,39 +45,6 @@
     
 </body>
 <script>
-    //izmeniti ABI za contract, kao i adrese
-
-    if (typeof web3 !== 'undefined') {
-        web3 = new Web3(web3.currentProvider);
-    } else {
-        // set the provider you want from Web3.providers
-        web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-    }
-    web3.eth.defaultAccount = web3.eth.accounts[0];
-    var WakandaVoting = new web3.eth.Contract([
-
-    ], '0x17D203e99F74D71a03353a91D824e8F1B08443ae', // contract address
-    {
-        from: '0xb13622Bd3650d2e7f28cf8BA588A2b7b2594F4A7', // default from address
-        gasPrice: '20000' // default gas price in wei, 20 gwei in this case
-    });
-
-     console.log(WakandaVoting);
-     console.log(web3.eth.accounts);
-    // WakandaVoting.methods.winningCandidates().call(function (error, result) {
-    //     if (!error) {
-    //         // $("#apartment").html(result);
-    //         alert("HIT!")
-    //     }
-    //     else{
-    //         console.error(error);
-    //         alert("Error occured while getting the winning candidates list!");
-    //     }
-    // });
-
-
-    var numberOfVotes = 0;
-
     $(document).ready(function() {
         /*API Candidates: https://wakanda.zmilos.com/list
           
@@ -98,16 +65,62 @@
             }
         });
 
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        const account = accounts[0];
+        $("#inEthAddress").val(account);
+        web3.eth.defaultAccount = account;
+
     });
 
-    function onSuccess(data){
-
+    if (typeof web3 !== 'undefined') {
+			web3 = new Web3(window.ethereum);
+    } else {
+        // set the provider you want from Web3.providers
+        web3 = new Web3(new Web3.providers.HttpProvider(window.ethereum));
     }
+
+    var wakandaVotingAbi = [{}];
+    var wakandaVotingAddress = '0xd49075AE6335A4E007729507dcF69Dfcad91803C';
+    
+    var wkndTokenAbi = [{}];
+    var wkndTokenAddress = '0xd49075AE6335A4E007729507dcF69Dfcad91803C';
+
+    var WakandaVoting = new web3.eth.Contract(wakandaVotingAbi, wakandaVotingAddress, { from: web3.eth.defaultAccount });
+    var WKNDToken = new web3.eth.Contract(wkndTokenAbi, wkndTokenAddress, {from: web3.eth.defaultAccount });
+
+    var numberOfVotes = 0;
 
     $("#btnVote").click(function(){
         if(numberOfVotes === 0){
             alert("Voted successfully!");
             numberOfVotes++;
+
+            var currentBalanceWKND;
+
+            WKNDToken.methods.balanceOf(web3.eth.defaultAccount).call(function (error, result) {
+				if (!error) {
+					currentBalanceWKND = result;
+				}
+				else{
+					console.error(error);
+					alert("Error occured while getting the WKND balance!");
+				}
+			});
+
+            var amount = 1000000000000000000;
+
+            if(currentBalanceWKND >= amount){
+                WKNDToken.methods.transfer(wkndTokenAddress, amount).send({
+                    from: web3.eth.defaultAccount
+                });
+
+                WakandaVoting.methods.vote($("#ddlCandidates").val()).send({
+                    from: web3.eth.defaultAccount
+                });
+
+            }else{
+                alert("Not enough WKND coins for voting!");
+            }
         }else{
             alert("Voting failed! You've already voted!!");
         }

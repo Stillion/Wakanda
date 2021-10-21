@@ -6,6 +6,11 @@
 	"output": {
 		"abi": [
 			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
 				"anonymous": false,
 				"inputs": [
 					{
@@ -29,6 +34,11 @@
 				"name": "candidates",
 				"outputs": [
 					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
 						"internalType": "string",
 						"name": "name",
 						"type": "string"
@@ -39,12 +49,19 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "address",
-						"name": "ethAddress",
-						"type": "address"
+						"internalType": "bool",
+						"name": "exists",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "register",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -53,27 +70,9 @@
 						"internalType": "string",
 						"name": "_name",
 						"type": "string"
-					},
-					{
-						"internalType": "address",
-						"name": "_ethAddress",
-						"type": "address"
 					}
 				],
-				"name": "createCandidate",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_candidateAddress",
-						"type": "address"
-					}
-				],
-				"name": "voteForCandidate",
+				"name": "vote",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -85,6 +84,11 @@
 					{
 						"components": [
 							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
 								"internalType": "string",
 								"name": "name",
 								"type": "string"
@@ -95,9 +99,9 @@
 								"type": "uint256"
 							},
 							{
-								"internalType": "address",
-								"name": "ethAddress",
-								"type": "address"
+								"internalType": "bool",
+								"name": "exists",
+								"type": "bool"
 							}
 						],
 						"internalType": "struct WakandaVoting.Candidate[3]",
@@ -114,7 +118,10 @@
 			"kind": "dev",
 			"methods": {
 				"winningCandidates()": {
-					"details": "implement the function "
+					"details": "implementation done for now ",
+					"returns": {
+						"_0": "result - list of currently top 3 winning candidates"
+					}
 				}
 			},
 			"title": "A contract for voting for Wakandan UN Officials",
@@ -147,12 +154,68 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/WakandaVoting.sol": {
-			"keccak256": "0xb24b8e62a67753ba0de47c5d6143cfb776847d5eafcd085612ada4d966ac3df4",
+		"@openzeppelin/contracts/token/ERC20/ERC20.sol": {
+			"keccak256": "0xb03df8481a954604ad0c9125680893b2e3f7ff770fe470e38b89ac61b84e8072",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://2b01cb407ee715f276e565f17912a5e8fb04058ec3b37e0b83bb084498e9246a",
-				"dweb:/ipfs/QmSLPbBbenbENFpqEwi35VbwVz2mPM3UtmKZBsr62g7jvq"
+				"bzz-raw://b34655953d18ba3a45b762fb6bdbb6549af69a27435e10ece178742bf70baf45",
+				"dweb:/ipfs/QmcqjUoFLLMyx7dbwSHUnDBH6aphkVHXWQvQRRev5EAWEh"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x027b891937d20ccf213fdb9c31531574256de774bda99d3a70ecef6e1913ed2a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://087318b21c528119f649899f5b5580566dd8d7b0303d4904bd0e8580c3545f14",
+				"dweb:/ipfs/Qmbn5Mj7aUn8hJuQ8VrQjjEXRsXyJKykgnjR9p4C3nfLtL"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
+			"keccak256": "0x83fe24f5c04a56091e50f4a345ff504c8bff658a76d4c43b16878c8f940c53b2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d4c3df1a7ca104b633a7d81c6c6f5192367d150cd5a32cba81f7f27012729013",
+				"dweb:/ipfs/QmSim72e3ZVsfgZt8UceCvbiSuMRHR6WDsiamqNzZahGSY"
+			]
+		},
+		"@openzeppelin/contracts/utils/Context.sol": {
+			"keccak256": "0x90565a39ae45c80f0468dc96c7b20d0afc3055f344c8203a0c9258239f350b9f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://26e8b38a7ac8e7b4463af00cf7fff1bf48ae9875765bf4f7751e100124d0bc8c",
+				"dweb:/ipfs/QmWcsmkVr24xmmjfnBQZoemFniXjj3vwT78Cz6uqZW1Hux"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/SafeMath.sol": {
+			"keccak256": "0x8666f020bd8fc9dc14f07e2ebc52b5f236ab4cdde7c77679b08cb2f94730043b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://163776cbf565c722232393aa2d62cbe8a2ffb5805986abf4906c00e1e07450a6",
+				"dweb:/ipfs/QmPZoN9T3cb6o8bGhjBPZcz7im8T8DWhpr3tjLwhJJHx9N"
+			]
+		},
+		"contracts/WakandaVoting.sol": {
+			"keccak256": "0x0162478da7be8af4ce3af175aed6a0d0f85eff9202356f072f27c1c5c02d4a0f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://61404ab560c49903dbe1a8d641983fc05e822434f2b0272373e2a6348cdd719b",
+				"dweb:/ipfs/QmTqEiLHyhL2kMMu3ERa9uSfWUegiKUCvLmHTDe4MEAVHT"
+			]
+		},
+		"contracts/token/WKNDFaucet.sol": {
+			"keccak256": "0x840dea34e72ae26c4fe8424053b32abd9a3e4dbe4e00ae49d97c4f96ba0e772e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5cda84e0386639b15c5ac05a77e1165c70b338bef8879bb80e63781d4d2b3c61",
+				"dweb:/ipfs/QmW9DeRuuo97EZtTFeYJFYsDDPjy5WNww6DfFZt2Lh9kWn"
+			]
+		},
+		"contracts/token/WKNDToken.sol": {
+			"keccak256": "0xb2997ebf2cab79097a08632a1f46b42e4565c6292e0868705064ca441f41d849",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7966aedc7152ca7cd7ecaf0378575a76fab84669e5de45347c79bfbc1b89c8ed",
+				"dweb:/ipfs/QmNPZDVZbYx8AnPYJGmBwSMXPAZD3SksbfFvHTaH81W7ZP"
 			]
 		}
 	},

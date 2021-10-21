@@ -7,8 +7,21 @@
     <title>Wakanda Forever</title>
 
     <link rel="stylesheet" type="text/css" href="main.css">
-		
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+	
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>	
+    
+    <!-- <script src="https://unpkg.com/@metamask/detect-provider/dist/detect-provider.min.js"></script>
+    <script type="text/javascript">
+        const provider = await detectEthereumProvider()
+                
+        if (provider) {
+            // handle provider
+            console.log("POSTOJI!!!")
+        } else {
+            // handle no provider
+            console.log("NEMA GA!!")
+        }
+      </script>  -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="*"></script>
 
 </head>
@@ -19,7 +32,9 @@
         <h1>Register For Wakanda Elections</h1>
 
         <label for="lblEthAddress">Ethereum Address:</label>
-        <input type="text" id="inEthAddress" placeholder="Your Ethereum Address">
+        <input type="text" id="inEthAddress" placeholder="Your Ethereum Address" disabled>
+
+        <button class="enableEthereumButton">Enable Ethereum</button>
 
         <button id="btnRegister">REGISTER</button>
 
@@ -27,10 +42,74 @@
     
 </body>
 <script>
+    const ethereumButton = document.querySelector('.enableEthereumButton');
+    const showAccount = document.querySelector('#inEthAddress');
+
+    if (typeof web3 !== 'undefined') {
+			web3 = new Web3(window.ethereum);
+    } else {
+        // set the provider you want from Web3.providers
+        web3 = new Web3(new Web3.providers.HttpProvider(window.ethereum));
+    }
+
+    ethereumButton.addEventListener('click', () => {
+        getAccount();
+    });
+
+    async function getAccount() {
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        const account = accounts[0];
+        $("#inEthAddress").val(account);
+        web3.eth.defaultAccount = account;
+    }
+
+    var abi = [
+                {
+                    "inputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "constructor"
+                },
+                {
+                    "stateMutability": "payable",
+                    "type": "fallback"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "_tokenAddress",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "setTokenAddress",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "withdraw_amount",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "withdraw",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                }
+            ];
+    var contractAddress = '0xd49075AE6335A4E007729507dcF69Dfcad91803C';
+
+    var WKNDFaucet = new web3.eth.Contract(abi, contractAddress, { from: web3.eth.defaultAccount });
+    
+    
     $("#btnRegister").click(function(){
-        //ADD 1 WKND TOKEN TO THE REGISTERED ADDRESS
-        alert("1 WKND ADDED - PLEASE IMPLEMENT")
-        window.open('./vote.html', '_self')
+        WKNDFaucet.methods.withdraw(100).send({
+            from: web3.eth.defaultAccount
+        });
+        window.open('http://127.0.0.1:8080/frontend/vote.html', '_self')
     });
 
 </script>
