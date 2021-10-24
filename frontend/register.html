@@ -9,19 +9,6 @@
     <link rel="stylesheet" type="text/css" href="main.css">
 	
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>	
-    
-    <!-- <script src="https://unpkg.com/@metamask/detect-provider/dist/detect-provider.min.js"></script>
-    <script type="text/javascript">
-        const provider = await detectEthereumProvider()
-                
-        if (provider) {
-            // handle provider
-            console.log("POSTOJI!!!")
-        } else {
-            // handle no provider
-            console.log("NEMA GA!!")
-        }
-      </script>  -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="*"></script>
 
 </head>
@@ -37,6 +24,7 @@
         <button class="enableEthereumButton">Enable Ethereum</button>
 
         <button id="btnRegister">REGISTER</button>
+        <button id="btnVote" style="display: none">Vote</button>
 
     </div>
     
@@ -63,52 +51,62 @@
         web3.eth.defaultAccount = account;
     }
 
-    var abi = [
-                {
-                    "inputs": [],
-                    "stateMutability": "nonpayable",
-                    "type": "constructor"
-                },
-                {
-                    "stateMutability": "payable",
-                    "type": "fallback"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "address",
-                            "name": "_tokenAddress",
-                            "type": "address"
-                        }
-                    ],
-                    "name": "setTokenAddress",
-                    "outputs": [],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "uint256",
-                            "name": "withdraw_amount",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "withdraw",
-                    "outputs": [],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
-                }
-            ];
-    var contractAddress = '0xd49075AE6335A4E007729507dcF69Dfcad91803C';
+    
+    var wkndFaucetAddress = '0xb2d6E14E26f433A191652F12A4F213D19E212e02';
+    var wkndFaucetAbi = [
+                            {
+                                "inputs": [],
+                                "stateMutability": "nonpayable",
+                                "type": "constructor"
+                            },
+                            {
+                                "inputs": [
+                                    {
+                                        "internalType": "address",
+                                        "name": "_tokenAddress",
+                                        "type": "address"
+                                    }
+                                ],
+                                "name": "setTokenAddress",
+                                "outputs": [],
+                                "stateMutability": "nonpayable",
+                                "type": "function"
+                            },
+                            {
+                                "inputs": [
+                                    {
+                                        "internalType": "uint256",
+                                        "name": "_withdraw_amount",
+                                        "type": "uint256"
+                                    }
+                                ],
+                                "name": "withdraw",
+                                "outputs": [],
+                                "stateMutability": "nonpayable",
+                                "type": "function"
+                            },
+                            {
+                                "stateMutability": "payable",
+                                "type": "receive"
+                            }
+                        ];
 
-    var WKNDFaucet = new web3.eth.Contract(abi, contractAddress, { from: web3.eth.defaultAccount });
+    var WKNDFaucet = new web3.eth.Contract(wkndFaucetAbi, wkndFaucetAddress, { from: web3.eth.defaultAccount });
     
-    
+    var amount = 1;
+
     $("#btnRegister").click(function(){
-        WKNDFaucet.methods.withdraw(100).send({
+        WKNDFaucet.methods.withdraw(amount).send({
             from: web3.eth.defaultAccount
+        }, function(err, res){
+            if(!err){
+                $("#btnVote").show();
+            }
         });
+        
+    });
+
+    $("#btnVote").click(function(){
         window.open('http://127.0.0.1:8080/frontend/vote.html', '_self')
     });
 

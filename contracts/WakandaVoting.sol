@@ -1,27 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./token/WKNDToken.sol";
-import "./token/WKNDFaucet.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 /// @title A contract for voting for Wakandan UN Officials
 /// @author Milos Dograjic
 /// @notice For now this contract is simulating the Wakandan voting mechanism
 contract WakandaVoting {
 
-    using SafeMath for uint;
-
     address owner;
-    WKNDToken WToken;
-    WKNDFaucet WFaucet;
-    address tokenAddress = 0x150458678Acf69224047d3bDa31BA0B944B5d1ff;
-    address payable faucetAddress = payable(0xd49075AE6335A4E007729507dcF69Dfcad91803C);
 
     constructor(){
         owner = msg.sender;
-        WToken = WKNDToken(tokenAddress);
-        WFaucet = WKNDFaucet(faucetAddress); 
     }
 
     modifier onlyOwner(){
@@ -46,17 +35,16 @@ contract WakandaVoting {
     
     /// @notice Modifier that checks if WKND amount was payed for voting
     /// @dev implementation done for now
-    modifier feePayed(){
-        require(votingFeePayed[msg.sender] == true);
+    modifier feePayed(address _sender){
+        require(votingFeePayed[_sender] == true, "Payment not registered on blockhain!");
         _;
     }
 
 
     /// @notice This function returns the list of top 3 candidates
     /// @dev implementation done for now
-    function _createCandidate(string memory _name) private {
-        uint id = candidates.length;
-        Candidate memory newCand = Candidate(id, _name, 1, true);
+    function _createCandidate(uint _id, string memory _name) private {
+        Candidate memory newCand = Candidate(_id, _name, 1, true);
         candidates.push(newCand);
 
         if(leaderboard["first"].exists == false){
@@ -86,38 +74,40 @@ contract WakandaVoting {
     }
 
 
-    function vote(string memory _name, uint tokenAmount) external{
-        require(tokenAmount == 10000000000000000);
-        votingFeePayed[msg.sender] = true;
-        _voteForCandidate(_name);
+    function vote(uint _candidateId, string memory _name, bool _payed) external{
+        require(_payed == true);
+        address sender = msg.sender;
+        votingFeePayed[sender] = true;
+        _voteForCandidate(sender, _candidateId, _name);
     }
 
     /// @notice This function is used for voting for a candidate
-    /// @param _name name of the candidate
+    /// @param _candidateId id of the candidate
     /// @dev implementation done for now 
-    function _voteForCandidate(string memory _name) private feePayed{
+    function _voteForCandidate(address _sender, uint _candidateId, string memory _name) private feePayed(_sender){
         bool exists = false;
         votingFeePayed[msg.sender] = false;
         
-        for(uint i = 0; i < candidates.length; i.add(1)){
-            if(keccak256(bytes(candidates[i].name)) == keccak256(bytes(_name))){
+        for(uint i = 0; i < candidates.length; i++){ //we have 10 candidates
+            if(candidates[i].id == _candidateId){
                 exists = true;
-                candidates[i].votes = candidates[i].votes.add(1);
-
-                if(candidates[i].votes > leaderboard["first"].votes){
+                candidates[i].votes = candidates[i].votes + 1;
+                uint votes = candidates[i].votes;
+                
+                if(votes > leaderboard["first"].votes){
                     _checkLeaderboardOrder(candidates[i]);
 
                     leaderboard["third"] = leaderboard["second"];
                     leaderboard["second"] = leaderboard["first"];
                     leaderboard["first"] = candidates[i];
                 }
-                else if(candidates[i].votes > leaderboard["second"].votes){
+                else if(votes > leaderboard["second"].votes){
                     _checkLeaderboardOrder(candidates[i]);
 
                     leaderboard["third"] = leaderboard["second"];
                     leaderboard["second"] = candidates[i];
                 }
-                else if(candidates[i].votes > leaderboard["third"].votes){
+                else if(votes > leaderboard["third"].votes){
                     _checkLeaderboardOrder(candidates[i]);
                     leaderboard["third"] = candidates[i];
                 } 
@@ -125,7 +115,7 @@ contract WakandaVoting {
         }
 
         if(exists == false){
-            _createCandidate(_name);
+            _createCandidate(_candidateId, _name);
         }
     }
 
@@ -134,9 +124,9 @@ contract WakandaVoting {
     /// @param _cand Candidate for which we check the leaderboard
     /// @dev implementation done for now 
     function _checkLeaderboardOrder(Candidate memory _cand) private{
-        if(keccak256(bytes(_cand.name)) != keccak256(bytes(leaderboard["first"].name))
-            && keccak256(bytes(_cand.name)) != keccak256(bytes(leaderboard["second"].name))
-            && keccak256(bytes(_cand.name)) != keccak256(bytes(leaderboard["third"].name))){
+        if(_cand.id !=leaderboard["first"].id
+            &&_cand.id != leaderboard["second"].id
+            && _cand.id != leaderboard["third"].id){
             
             emit NewChallenger(_cand.name);
         }

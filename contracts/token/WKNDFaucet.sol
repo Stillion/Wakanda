@@ -2,14 +2,16 @@
 pragma solidity ^0.8.0;
 
 import "./WKNDToken.sol";
-
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 // A faucet for ERC20 token WKND
 contract WKNDFaucet {
 
+	using SafeMath for uint;
+
 	WKNDToken WToken;
 	address WKNDOwner;
-    address tokenAddress = 0x150458678Acf69224047d3bDa31BA0B944B5d1ff;
+    address tokenAddress = 0xf0a3c1aeFB1D6cAdfa33f4f25202125838238871;
 
 	constructor(){
 		// Initialize the WKNDToken with the token address
@@ -23,13 +25,15 @@ contract WKNDFaucet {
     }
 
 
-	function withdraw(uint withdraw_amount) public {
+	function withdraw(uint _withdraw_amount) public {
 
     	// Limit withdrawal amount to 1 WKND
-    	require(withdraw_amount <= 1000000000000000000);
+    	require(_withdraw_amount <= 1 && _withdraw_amount > 0);
+
+		uint wkndAmount = _withdraw_amount.mul(1000000000000000000);
 
 		// Use the transferFrom function of WKNDToken
-		WToken.transferFrom(WKNDOwner, msg.sender, withdraw_amount);
+		WToken.transferFrom(WKNDOwner, msg.sender, wkndAmount);
     }
 
     function setTokenAddress(address _tokenAddress) external onlyOwner{
@@ -37,6 +41,6 @@ contract WKNDFaucet {
     }
 
 	// REJECT any incoming ether
-	fallback () external payable { revert(); }
+	receive () external payable { revert(); }
 
 }

@@ -378,11 +378,11 @@
 			]
 		},
 		"contracts/token/WKNDToken.sol": {
-			"keccak256": "0xb2997ebf2cab79097a08632a1f46b42e4565c6292e0868705064ca441f41d849",
+			"keccak256": "0x0b3e667c20c632f78f66e262ce0b4dc808783be4fa17d942bbbcc3ce24854fd8",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7966aedc7152ca7cd7ecaf0378575a76fab84669e5de45347c79bfbc1b89c8ed",
-				"dweb:/ipfs/QmNPZDVZbYx8AnPYJGmBwSMXPAZD3SksbfFvHTaH81W7ZP"
+				"bzz-raw://8ed94e0584c4f8e301722045c285dfdb8463ac9f413df1d020a2220b11a4387a",
+				"dweb:/ipfs/QmYMSikbtNUErkKvbA5a61xNHREuUAbGcXMRYiZxtLRtgs"
 			]
 		}
 	},
