@@ -5,7 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vote</title>
-
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="main.css">
 		
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>	
@@ -18,10 +21,12 @@
 
         <h1>Vote For Wakanda UN Officials</h1>
 
-        <label for="ddlCandidates">Candidate:</label>
-        <select name="ddlCandidates" id="ddlCandidates">
-            <option value="default">Select Candidate</option>
-        </select>
+        <div>
+            <label for="ddlCandidates">Candidate:</label>
+            <select name="ddlCandidates" id="ddlCandidates">
+                <option value="default">Select Candidate</option>
+            </select>
+        </div>
 
         <div id="divLeaderboard" class="hide">
 
@@ -37,14 +42,18 @@
         
         <hr>
         
-        <label for="inWkndBalance">Current WKND Balance:</label>
-        <input type="text" id="inWkndBalance" placeholder="WKND Balance" disabled>
-        <button id="btnCheckBalance">Check Balance</button>
-
-        <label for="lblVotingFee">Voting Fee:</label>
-        <input type="text" id="inVotingFee" placeholder="Vote = 1 WKND">
-
-        <button id="btnVote">VOTE</button>
+        <div>
+            <label for="inWkndBalance">Current WKND Balance:</label>
+            <input type="text" id="inWkndBalance" placeholder="WKND Balance" disabled>
+            <button id="btnCheckBalance">Check Balance</button>
+        </div>
+        
+        <div>
+            <label for="lblVotingFee">Voting Fee:</label>
+            <input type="text" id="inVotingFee" placeholder="Vote = 1 WKND">
+            <button id="btnVote">VOTE</button>
+        </div>
+        
 
         
     </div>

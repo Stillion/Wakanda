@@ -1,18 +1,37 @@
 body {
-    background-color:#F0F0F0;
-    padding: 2em;
-    font-family: 'Raleway','Source Sans Pro', 'Arial';
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    line-height: 1.8em;
+    letter-spacing: 0.2px;
+    display: flex;
+    height: 100vh;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    align-items: center;
+    border: 24px solid #000;
+    opacity: 0.71;
+    text-align: left;
 }
 .container {
+    display: flex;
+    max-width: 720px;
+    padding-right: 16px;
+    padding-left: 16px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    letter-spacing: 0.2px;
     margin: auto;
-    width: 50%;
-    border: 3px solid grey;
-    padding: 3%;
-      
 }
 label {
     display:block;
-    margin-bottom:10px;
+    margin-bottom:16px;
+    margin-top: 16px;
+    font-size: 18px;
+    font-weight: 400;
+    width: 250px;
+    max-width: 250px;
 }
 input {
     padding:10px;
@@ -20,20 +39,61 @@ input {
     margin-bottom: 1em;
 }
 button {
-    margin: 2em 0;
-    padding: 1em 4em;
     display:block;
-}
-
-h1,h2{
+    overflow: visible;
+    width: 200px;
+    height: 20px;
+    padding: 12px 32px;
+    float: left;
+    clear: both;
+    border: 2px solid #000;
+    background-color: #000;
+    font-size: 16px;
+    line-height: 1.8px;
     text-align: center;
+    color: white; 
 }
 
-textarea{
-    width: 100%;
-    resize: none;
+h1{
+    margin-bottom: 20px;
+}
+
+div{
+    position: static;
+    display: flex;
+    clear: none;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    align-items: center;
+    align-content: flex-start;
+}
+
+input{
+    display:block;
+    margin-bottom:16px;
+    margin-top: 12px;
+    margin-right: 5%;
+    font-size: 16px;
+    font-weight: 400;
+    width: 250px;
+    max-width: 250px;
+    font-family: 'Montserrat', 'sans-serif';
 }
 
 .hide{
     display: none;
+}
+
+#lblEthAddress{
+    width: 200px;
+}
+
+#inEthAddress{
+    width: 400px;
+    margin-right: 0;
+}
+
+select{
+    font-family: 'Montserrat', 'sans-serif';
 }
