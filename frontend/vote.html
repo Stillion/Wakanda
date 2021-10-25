@@ -562,8 +562,10 @@
             }, function(err, res){
                 if(!err){
                     payed = true;
+                    currentBalanceWKND--;
                     var id = $("#ddlCandidates :selected").val();
                     var name = $("#ddlCandidates :selected").text();
+
                     if(payed === true){
                         WakandaVoting.methods.vote(id, name, payed).send({
                             from: web3.eth.defaultAccount
@@ -587,6 +589,9 @@
         }else{
             alert("Not enough WKND coins for voting! 1 WKND coin needed for voting!");
         }
+
+        $("#inVotingFee").val('');
+        $("#inWkndBalance").val('');
         
     });
 
