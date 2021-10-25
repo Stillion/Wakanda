@@ -16,11 +16,24 @@
 					{
 						"indexed": false,
 						"internalType": "string",
-						"name": "name",
+						"name": "_name",
 						"type": "string"
 					}
 				],
 				"name": "NewChallenger",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "_name",
+						"type": "string"
+					}
+				],
+				"name": "Voted",
 				"type": "event"
 			},
 			{
@@ -158,11 +171,11 @@
 	},
 	"sources": {
 		"contracts/WakandaVoting.sol": {
-			"keccak256": "0x9ae68099af217fa98d6732742ed12583a6f3f553a42dea81fbc634111f1ec77e",
+			"keccak256": "0x7b48c539e5f3ba45364fc2d30a8f12ca98c7f90b4e356866316d182e062ddb7a",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://0d8e58f244d67617620c282f67ecf0b9354d29571151dee8448ed4fc6515b115",
-				"dweb:/ipfs/QmTEa3KkyifnLMWiyUJuU14G48gMNTHJ4XyFCnCEV4H799"
+				"bzz-raw://b4404fc7225c4295c8fd285a4f39b717892b94c3227418cccd803497734a36c9",
+				"dweb:/ipfs/QmTQTxSPUmkXitdJE6zzrRtJZbeVYyvqHh4id7w8LhrdcS"
 			]
 		}
 	},

@@ -21,17 +21,16 @@
         <label for="lblEthAddress">Ethereum Address:</label>
         <input type="text" id="inEthAddress" placeholder="Your Ethereum Address" disabled>
 
-        <button class="enableEthereumButton">Enable Ethereum</button>
-
         <button id="btnRegister">REGISTER</button>
-        <button id="btnVote" style="display: none">Vote</button>
 
     </div>
     
 </body>
 <script>
-    const ethereumButton = document.querySelector('.enableEthereumButton');
-    const showAccount = document.querySelector('#inEthAddress');
+
+    $(document).ready(function() {
+        getAccount();
+    });
 
     if (typeof web3 !== 'undefined') {
 			web3 = new Web3(window.ethereum);
@@ -39,10 +38,6 @@
         // set the provider you want from Web3.providers
         web3 = new Web3(new Web3.providers.HttpProvider(window.ethereum));
     }
-
-    ethereumButton.addEventListener('click', () => {
-        getAccount();
-    });
 
     async function getAccount() {
         const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
@@ -100,14 +95,10 @@
             from: web3.eth.defaultAccount
         }, function(err, res){
             if(!err){
-                $("#btnVote").show();
+                window.open('http://127.0.0.1:8080/frontend/vote.html', '_self')
             }
         });
         
-    });
-
-    $("#btnVote").click(function(){
-        window.open('http://127.0.0.1:8080/frontend/vote.html', '_self')
     });
 
 </script>

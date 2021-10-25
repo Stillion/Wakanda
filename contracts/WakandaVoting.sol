@@ -13,12 +13,9 @@ contract WakandaVoting {
         owner = msg.sender;
     }
 
-    modifier onlyOwner(){
-        require(msg.sender == owner);
-        _;
-    }
-
-    event NewChallenger(string name);
+    
+    event NewChallenger(string _name);
+    event Voted(string _name);
 
     struct Candidate{
         uint id;
@@ -31,7 +28,7 @@ contract WakandaVoting {
 
     mapping (string => Candidate) leaderboard;
     mapping (address => bool) votingFeePayed;
-
+    mapping (address => mapping(string => bool)) voterToCandidate;
     
     /// @notice Modifier that checks if WKND amount was payed for voting
     /// @dev implementation done for now
@@ -39,7 +36,16 @@ contract WakandaVoting {
         require(votingFeePayed[_sender] == true, "Payment not registered on blockhain!");
         _;
     }
-
+    
+    modifier onlyOwner(){
+        require(msg.sender == owner);
+        _;
+    }
+    
+    modifier alreadyVotedForCandidate(string memory _name){
+        require(voterToCandidate[msg.sender][_name] == false, "You cannot vote twice for one candidate!");
+        _;
+    }
 
     /// @notice This function returns the list of top 3 candidates
     /// @dev implementation done for now
@@ -74,7 +80,7 @@ contract WakandaVoting {
     }
 
 
-    function vote(uint _candidateId, string memory _name, bool _payed) external{
+    function vote(uint _candidateId, string memory _name, bool _payed) external alreadyVotedForCandidate(_name){
         require(_payed == true);
         address sender = msg.sender;
         votingFeePayed[sender] = true;
@@ -87,7 +93,9 @@ contract WakandaVoting {
     function _voteForCandidate(address _sender, uint _candidateId, string memory _name) private feePayed(_sender){
         bool exists = false;
         votingFeePayed[msg.sender] = false;
-        
+        voterToCandidate[_sender][_name] = true;
+        emit Voted(_name);
+    
         for(uint i = 0; i < candidates.length; i++){ //we have 10 candidates
             if(candidates[i].id == _candidateId){
                 exists = true;

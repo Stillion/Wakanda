@@ -15,13 +15,6 @@
 <body>
 
     <div class="container">
-        
-        <label for="inEthAddress">Ethereum Address:</label>
-        <input type="text" id="inEthAddress" placeholder="Your Ethereum Address" disabled>
-
-        <button class="enableEthereumButton">Enable Ethereum</button>
-
-        <hr>
 
         <h1>Vote For Wakanda UN Officials</h1>
 
@@ -34,9 +27,9 @@
 
             <label for="ulLeaders">Leaderboard:</label>
             <ul id="ulLeaders">
-                <li id="first">test1</li>
-                <li id="second">test2</li>
-                <li id="third">test3</li>
+                <li id="first"></li>
+                <li id="second"></li>
+                <li id="third"></li>
             </ul>
         </div>
 
@@ -46,15 +39,12 @@
         
         <label for="inWkndBalance">Current WKND Balance:</label>
         <input type="text" id="inWkndBalance" placeholder="WKND Balance" disabled>
-        <button id="btnCheckBalance" style="display: none;">Check Balance</button>
+        <button id="btnCheckBalance">Check Balance</button>
 
         <label for="lblVotingFee">Voting Fee:</label>
         <input type="text" id="inVotingFee" placeholder="Vote = 1 WKND">
 
-
-        <button id="btnPayVotingFee" style="display: none;">Pay Voting Fee</button>
-
-        <button id="btnVote" style="display: none;">VOTE</button>
+        <button id="btnVote">VOTE</button>
 
         
     </div>
@@ -81,31 +71,27 @@
             }
         });
 
+        getAccount();
     });
 
-    const ethereumButton = document.querySelector('.enableEthereumButton');
-    const showAccount = document.querySelector('#inEthAddress');
-
+    
     if (typeof web3 !== 'undefined') {
-			web3 = new Web3(window.ethereum);
+                web3 = new Web3(window.ethereum);
     } else {
         // set the provider you want from Web3.providers
         web3 = new Web3(new Web3.providers.HttpProvider(window.ethereum));
     }
-
-    ethereumButton.addEventListener('click', () => {
-        getAccount();
-    });
 
     async function getAccount() {
         const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
         const account = accounts[0];
         $("#inEthAddress").val(account);
         web3.eth.defaultAccount = account;
-        $("#btnCheckBalance").show();
+
+        
     }
 
-    var wakandaVotingAddress = '0xbbBAfaCFAD6B96e021e36817A5b08703E714D89b';
+    var wakandaVotingAddress = '0xC4820B46dF060A52d9638eE81Ac3C88c0544C86A';
     var wakandaVotingAbi = [
 	{
 		"inputs": [],
@@ -118,11 +104,24 @@
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "name",
+				"name": "_name",
 				"type": "string"
 			}
 		],
 		"name": "NewChallenger",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			}
+		],
+		"name": "Voted",
 		"type": "event"
 	},
 	{
@@ -501,8 +500,33 @@
     var WakandaVoting = new web3.eth.Contract(wakandaVotingAbi, wakandaVotingAddress, { from: web3.eth.defaultAccount });
     var WKNDToken = new web3.eth.Contract(wkndTokenAbi, wkndTokenAddress, {from: web3.eth.defaultAccount })
 
-    var currentBalanceWKND;
+    
+    WakandaVoting.events.NewChallenger(function(error, result){
+        if (!error) {
+            WakandaVoting.methods.winningCandidates().call(function (error, result){
+            if (!error) {
+                    $("#first").text(result[0][1]);
+                    $("#second").text(result[1][1]);
+                    $("#third").text(result[2][1]);
+                }
+				else{
+					alert("Error occured while getting the winning candidates!");
+				}
+			});
+        }
+        else{
+            alert("Error occured while getting the winning candidates!");
+        }
+    });
 
+    WakandaVoting.events.Voted(function(error, result){
+        if (!error) {
+           alert("You have successfully voted!");
+        }
+    });
+
+
+    var currentBalanceWKND;
     $("#btnCheckBalance").click(function(){
         WKNDToken.methods.balanceOf(web3.eth.defaultAccount).call(function (error, result) {
             if (!error) {
@@ -520,7 +544,7 @@
     
     var payed = false;
 
-    $("#btnPayVotingFee").click(function(){
+    $("#btnVote").click(function(){
         var amount = $("#inVotingFee").val() + "000000000000000000";
 
         if(currentBalanceWKND >= amount && amount == "1000000000000000000"){
@@ -529,44 +553,42 @@
             }, function(err, res){
                 if(!err){
                     payed = true;
-                    console.log("1 WKND transfered!")
-                    $("#btnVote").show();
+                    var id = $("#ddlCandidates :selected").val();
+                    var name = $("#ddlCandidates :selected").text();
+                    if(payed === true){
+                        WakandaVoting.methods.vote(id, name, payed).send({
+                            from: web3.eth.defaultAccount
+                        }), function (err, res){
+                            if(!err){
+                                alert("Voted successfully!");
+                            }else{
+                                alert("You cannot vote twice for the same candidate!");
+                            }
+                        };
+                    }else{
+                        alert("Voting fee hasn't been payed!");
+                    }
+                    
+                    payed = false;
                 }else{
                     console.log(err);
                 }
             });
 
         }else{
-            alert("Not enough WKND coins for voting! 1 WKND coin need for voting!");
+            alert("Not enough WKND coins for voting! 1 WKND coin needed for voting!");
         }
         
-    });
-
-    $("#btnVote").click(function(){
-        var id = $("#ddlCandidates :selected").val();
-        var name = $("#ddlCandidates :selected").text();
-        console.log(id);
-        console.log(name);
-        console.log(payed);
-        if(payed === true){
-            WakandaVoting.methods.vote(id, name, payed).send({
-                from: web3.eth.defaultAccount
-            }), function (err, res){
-                if(!err){
-                    console.log("Voted successfully!");
-                }else{
-                    console.log(err);
-                }
-            };
-        }else{
-            console.log("Voting fee hasn't been payed!");
-        }
-        
-        payed = false;
     });
 
     $("#btnLeaderboard").click(function(){
         $("#divLeaderboard").toggleClass("hide");
+
+        if($("#btnLeaderboard").text() == "Show Leads"){
+            $("#btnLeaderboard").text("Hide Leads");
+        }else if($("#btnLeaderboard").text() == "Hide Leads"){
+            $("#btnLeaderboard").text("Show Leads")
+        }
         WakandaVoting.methods.winningCandidates().call(function (error, result){
             if (!error) {
 					console.log(result);
