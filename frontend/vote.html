@@ -100,7 +100,7 @@
         
     }
 
-    var wakandaVotingAddress = '0xC4820B46dF060A52d9638eE81Ac3C88c0544C86A';
+    var wakandaVotingAddress = '0xf0e7C308FB8354dC807eF6225628f496c83930B6';
     var wakandaVotingAbi = [
 	{
 		"inputs": [],
@@ -227,7 +227,7 @@
 	}
 ];
     
-    var wkndTokenAddress = '0xf0a3c1aeFB1D6cAdfa33f4f25202125838238871';
+    var wkndTokenAddress = '0x53bB7aA27f1Ca45E1683eDf537174be746695d69';
     var wkndTokenAbi = [
                         {
                             "inputs": [],
@@ -570,9 +570,7 @@
                         WakandaVoting.methods.vote(id, name, payed).send({
                             from: web3.eth.defaultAccount
                         }), function (err, res){
-                            if(!err){
-                                alert("Voted successfully!");
-                            }else{
+                            if(err){
                                 alert("You cannot vote twice for the same candidate!");
                             }
                         };

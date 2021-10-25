@@ -14,7 +14,7 @@ contract WakandaVoting {
     }
 
     
-    event NewChallenger(string _name);
+    event NewChallenger(  _name);
     event Voted(string _name);
 
     struct Candidate{
@@ -102,20 +102,20 @@ contract WakandaVoting {
                 candidates[i].votes = candidates[i].votes + 1;
                 uint votes = candidates[i].votes;
                 
-                if(votes > leaderboard["first"].votes){
+                if(votes > leaderboard["first"].votes && _candidateId != leaderboard["first"].id){
                     _checkLeaderboardOrder(candidates[i]);
 
                     leaderboard["third"] = leaderboard["second"];
                     leaderboard["second"] = leaderboard["first"];
                     leaderboard["first"] = candidates[i];
                 }
-                else if(votes > leaderboard["second"].votes){
+                else if(votes > leaderboard["second"].votes && _candidateId != leaderboard["second"].id){
                     _checkLeaderboardOrder(candidates[i]);
 
                     leaderboard["third"] = leaderboard["second"];
                     leaderboard["second"] = candidates[i];
                 }
-                else if(votes > leaderboard["third"].votes){
+                else if(votes > leaderboard["third"].votes && _candidateId != leaderboard["third"].id){
                     _checkLeaderboardOrder(candidates[i]);
                     leaderboard["third"] = candidates[i];
                 } 

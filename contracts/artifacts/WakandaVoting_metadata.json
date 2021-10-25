@@ -171,11 +171,11 @@
 	},
 	"sources": {
 		"contracts/WakandaVoting.sol": {
-			"keccak256": "0x7b48c539e5f3ba45364fc2d30a8f12ca98c7f90b4e356866316d182e062ddb7a",
+			"keccak256": "0x8f391d3fc8c3e2350a779d9a1ccba8d462b962003ad4e4d9c214e475fdb1f742",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b4404fc7225c4295c8fd285a4f39b717892b94c3227418cccd803497734a36c9",
-				"dweb:/ipfs/QmTQTxSPUmkXitdJE6zzrRtJZbeVYyvqHh4id7w8LhrdcS"
+				"bzz-raw://f15fc1fd7510584905b6ec83be84a2355c080317cc14b93f33fd67d881fb0184",
+				"dweb:/ipfs/QmRDbSG9ys4VtBmXtR1qJhTuFkdjnAwFXgJEZkYkaujSqb"
 			]
 		}
 	},

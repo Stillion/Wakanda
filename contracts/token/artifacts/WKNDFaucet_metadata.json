@@ -109,11 +109,11 @@
 			]
 		},
 		"contracts/token/WKNDFaucet.sol": {
-			"keccak256": "0xc78dae17b008838437e41e6fa85ef956a8d7c6a827c6de9acd55a2c17f118089",
+			"keccak256": "0x8ccb7948ab0d0690b588f05e9617c7adc4aae5b1f084e332b75864e29e51a87a",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://447a1b03cb1a38c7d1495b923bf13b3d70e09d1ca74959c6b322b3ad15675e05",
-				"dweb:/ipfs/QmcMouies33SaF2inajoemQcn8JcKSnjspkhZ9AU96hryy"
+				"bzz-raw://5a3e44296198f18edc546946549dd939fb3212bffff7d1a9e1b64fba19007f51",
+				"dweb:/ipfs/QmS9nb6USbL4Lq9W7jzsDgiQA4WvtafGi6wFMhuUgEBS4e"
 			]
 		},
 		"contracts/token/WKNDToken.sol": {

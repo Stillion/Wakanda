@@ -11,7 +11,7 @@ contract WKNDFaucet {
 
 	WKNDToken WToken;
 	address WKNDOwner;
-    address tokenAddress = 0xf0a3c1aeFB1D6cAdfa33f4f25202125838238871;
+    address tokenAddress = 0x53bB7aA27f1Ca45E1683eDf537174be746695d69;
 
 	constructor(){
 		// Initialize the WKNDToken with the token address
