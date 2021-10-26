@@ -61,25 +61,7 @@
 </body>
 <script>
     $(document).ready(function() {
-        /*API Candidates: https://wakanda.zmilos.com/list
-          
-          Response: candidates: [
-                        {
-                            name: string;
-                            age: number;
-                            cult: string;
-                        }
-                    ]
-        */
-        $.get("https://wakanda.zmilos.com/list", function( data ) {
-            var candidates = data.candidates;
-            $('#ddlCandidates').empty();
-            $('#ddlCandidates').append('<option value="">Select A Candidate</option>');
-            for (i in candidates ) {
-                $('#ddlCandidates').append('<option value="' + i + '">' + candidates[i].name + ', '+ candidates[i].cult + '</option>');
-            }
-        });
-
+        getCandidates();
         getAccount();
     });
 
@@ -98,6 +80,27 @@
         web3.eth.defaultAccount = account;
 
         
+    }
+
+    function getCandidates(){
+        /*API Candidates: https://wakanda.zmilos.com/list
+          
+          Response: candidates: [
+                        {
+                            name: string;
+                            age: number;
+                            cult: string;
+                        }
+                    ]
+        */
+        $.get("https://wakanda.zmilos.com/list", function( data ) {
+            var candidates = data.candidates;
+            $('#ddlCandidates').empty();
+            $('#ddlCandidates').append('<option value="">Select A Candidate</option>');
+            for (i in candidates ) {
+                $('#ddlCandidates').append('<option value="' + i + '">' + candidates[i].name + ', '+ candidates[i].cult + '</option>');
+            }
+        });
     }
 
     var wakandaVotingAddress = '0xf0e7C308FB8354dC807eF6225628f496c83930B6';
@@ -544,7 +547,6 @@
                 $("#btnPayVotingFee").show();
             }
             else{
-                console.error(error);
                 alert("Error occured while getting the WKND balance!");
             }
         });
@@ -580,7 +582,7 @@
                     
                     payed = false;
                 }else{
-                    console.log(err);
+                    alert("Error occured while transfering WKND tokens!");
                 }
             });
 
@@ -603,13 +605,11 @@
         }
         WakandaVoting.methods.winningCandidates().call(function (error, result){
             if (!error) {
-					console.log(result);
                     $("#first").text(result[0][1]);
                     $("#second").text(result[1][1]);
                     $("#third").text(result[2][1]);
                 }
 				else{
-					console.error(error);
 					alert("Error occured while getting the winning candidates!");
 				}
 			});

@@ -4,7 +4,9 @@ pragma solidity ^0.8.0;
 import "./WKNDToken.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-// A faucet for ERC20 token WKND
+/// @title A contract for ERC20 WKND token distribution
+/// @author Milos Dograjic
+/// @notice This contract is used to distribute Wakanda token to the addresses
 contract WKNDFaucet {
 
 	using SafeMath for uint;
@@ -19,12 +21,14 @@ contract WKNDFaucet {
 		WKNDOwner = msg.sender;
 	}
 
+    /// @notice Modifier that checks if the owner of the contract sent the transaction
     modifier onlyOwner(){
         require(msg.sender == WKNDOwner);
         _;
     }
 
-
+	/// @notice This function is used for sending one token to the transaction sender
+    /// @param _withdraw_amount amount of WKND token to be sent
 	function withdraw(uint _withdraw_amount) public {
 
     	// Limit withdrawal amount to 1 WKND
@@ -36,11 +40,13 @@ contract WKNDFaucet {
 		WToken.transferFrom(WKNDOwner, msg.sender, wkndAmount);
     }
 
+	/// @notice This function is used for setting the WKND tokent contract address
+    /// @param _tokenAddress address of the WKND token contract
     function setTokenAddress(address _tokenAddress) external onlyOwner{
         tokenAddress = _tokenAddress;
     }
 
-	// REJECT any incoming ether
+	/// @notice This function is used for rejecting any incoming ether
 	receive () external payable { revert(); }
 
 }

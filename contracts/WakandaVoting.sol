@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 /// @title A contract for voting for Wakandan UN Officials
 /// @author Milos Dograjic
-/// @notice For now this contract is simulating the Wakandan voting mechanism
+/// @notice This contract is implementing the Wakandan voting mechanism
 contract WakandaVoting {
 
     address owner;
@@ -13,8 +13,7 @@ contract WakandaVoting {
         owner = msg.sender;
     }
 
-    
-    event NewChallenger(  _name);
+    event NewChallenger(string _name);
     event Voted(string _name);
 
     struct Candidate{
@@ -31,24 +30,28 @@ contract WakandaVoting {
     mapping (address => mapping(string => bool)) voterToCandidate;
     
     /// @notice Modifier that checks if WKND amount was payed for voting
-    /// @dev implementation done for now
+    /// @param _sender address of the transaction sender
     modifier feePayed(address _sender){
         require(votingFeePayed[_sender] == true, "Payment not registered on blockhain!");
         _;
     }
     
+    /// @notice Modifier that checks if the owner of the contract sent the transaction
     modifier onlyOwner(){
         require(msg.sender == owner);
         _;
     }
     
+    /// @notice Modifier that checks if the transaction sender already voted for the candidate
+    /// @param _name name of the candidate
     modifier alreadyVotedForCandidate(string memory _name){
         require(voterToCandidate[msg.sender][_name] == false, "You cannot vote twice for one candidate!");
         _;
     }
 
-    /// @notice This function returns the list of top 3 candidates
-    /// @dev implementation done for now
+    /// @notice This function creates a new candidate
+    /// @param _id id of the candidate
+    /// @param _name name of the candidate
     function _createCandidate(uint _id, string memory _name) private {
         Candidate memory newCand = Candidate(_id, _name, 1, true);
         candidates.push(newCand);
@@ -69,7 +72,6 @@ contract WakandaVoting {
 
     /// @notice This function returns the list of top 3 candidates
     /// @return result - list of currently top 3 winning candidates
-    /// @dev implementation done for now 
     function winningCandidates() external view returns(Candidate[3] memory){ 
         Candidate[3] memory currentLeaders;
         currentLeaders[0] = leaderboard["first"];
@@ -79,7 +81,10 @@ contract WakandaVoting {
         return currentLeaders;
     }
 
-
+    /// @notice This function is called by the client and is used to check the prerequisits for voting
+    /// @param _candidateId id of the candidate
+    /// @param _name name of the candidate
+    /// @param _payed flag for the WKND fee payment
     function vote(uint _candidateId, string memory _name, bool _payed) external alreadyVotedForCandidate(_name){
         require(_payed == true);
         address sender = msg.sender;
@@ -88,15 +93,16 @@ contract WakandaVoting {
     }
 
     /// @notice This function is used for voting for a candidate
+    /// @param _sender address of the voter
     /// @param _candidateId id of the candidate
-    /// @dev implementation done for now 
+    /// @param _name name of the candidate
     function _voteForCandidate(address _sender, uint _candidateId, string memory _name) private feePayed(_sender){
         bool exists = false;
         votingFeePayed[msg.sender] = false;
         voterToCandidate[_sender][_name] = true;
         emit Voted(_name);
     
-        for(uint i = 0; i < candidates.length; i++){ //we have 10 candidates
+        for(uint i = 0; i < candidates.length; i++){ 
             if(candidates[i].id == _candidateId){
                 exists = true;
                 candidates[i].votes = candidates[i].votes + 1;
@@ -130,7 +136,6 @@ contract WakandaVoting {
 
     /// @notice This function is used for checking if a new canidate entered the top 3 on the leaderboard
     /// @param _cand Candidate for which we check the leaderboard
-    /// @dev implementation done for now 
     function _checkLeaderboardOrder(Candidate memory _cand) private{
         if(_cand.id !=leaderboard["first"].id
             &&_cand.id != leaderboard["second"].id
